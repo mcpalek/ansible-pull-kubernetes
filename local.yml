@@ -1,56 +1,48 @@
-
-
 ---
- - hosts: localhost
-   connection: local
-   become: true
-   
-
-   tasks:
-   - name: install helm if it does not exist
-     unarchive:
+- hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: install helm if it does not exist
+      unarchive:
         src: https://get.helm.sh/{{ helm_version }}
         dest: /usr/local/bin
-        extra_opts: "--strip-components=1"
+        extra_opts: --strip-components=1
         owner: root
         group: root
-        mode: 0755
+        mode: 755
         remote_src: true
-     args:
-      creates: /usr/local/bin/helm
-
-   - name: Update all Debian/Ubuntu packages to their latest version
-     ansible.builtin.apt:
-                update_cache: true
-                cache_valid_time: 3600
-                name: "*"
-                state: latest
-     when: 
-       - ansible_distribution in ["Debian", "Ubuntu"]
-
-   - name: Update all RedHat/CentOs/Rocky packages to their latest version
-     ansible.builtin.dnf:
-                update_cache: true
-                name: "*"
-                state: latest
-     when: 
-       - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
-   - name: Remove Podman
-       shell: |
-         dnf remove podman.x86_64 -y
-     when: 
-       - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
-   - name: Uninstall old versions
-       dnf:
-         name:
-           - docker-client
-           - docker-client-latest
-           - docker-common
-           - docker-latest
-           - docker-latest-logrotate
-           - docker-logrotate
-           - docker-engine
-         state: absent
-     when: 
-       - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
-    
+      args:
+        creates: /usr/local/bin/helm
+    - name: Update all Debian/Ubuntu packages to their latest version
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+        name: "*"
+        state: latest
+      when:
+        - ansible_distribution in ["Debian", "Ubuntu"]
+    - name: Update all RedHat/CentOs/Rocky packages to their latest version
+      ansible.builtin.dnf:
+        update_cache: true
+        name: "*"
+        state: latest
+      when:
+        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+    - name: Remove podman
+      shell: |
+        dnf remove podman.x86_64 -y
+        dnf autoremove -y
+    - name: Uninstall old versions
+      dnf:
+        name:
+          - docker-client
+          - docker-client-latest
+          - docker-common
+          - docker-latest
+          - docker-latest-logrotate
+          - docker-logrotate
+          - docker-engine
+        state: absent
+      when:
+        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
