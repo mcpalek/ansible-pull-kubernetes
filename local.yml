@@ -4,9 +4,10 @@
    become: true
  
    tasks:
-   - name: install packages
+   - name: install prereq packages for Kubernetes
      package:
        name:
-         - htop
-         - tmux
-         - vim-nox
+         - helm
+         - curl
+         - apt-transport-https
+     #when: ansible_distribution in ["Debian", "Ubuntu"]
