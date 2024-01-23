@@ -46,3 +46,37 @@
         state: absent
       when:
         - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+    - name: Set up docker repository for Rocky
+      shell: >
+        dnf install -y yum-utils
+
+        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+      args:
+        warn: no
+      when:
+        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+    - name: Set up docker repository for Ubuntu
+      shell: >
+        sudo apt install -y curl gnupg2 software-properties-common
+        apt-transport-https ca-certificates curl -fsSL
+        https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - sudo
+        add-apt-repository "deb [arch=amd64]
+        https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+      when:
+        - ansible_distribution in ["Debian", "Ubuntu"]
+    - name: Install the latest version of Docker Engine and containerd all OS
+      package:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+    - name: Add the current user to the docker group
+      user:
+        name: aca
+        groups: docker
+        append: yes
+    - name: Start and enable docker
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
