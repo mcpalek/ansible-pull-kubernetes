@@ -37,20 +37,22 @@
        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
    
    - name: Remove Podman
-      shell: |
-        dnf remove podman.x86_64 -y
-        dnf autoremove -y
-    - name: Uninstall old versions
-      dnf:
-        name:
-          - docker-client
-          - docker-client-latest
-          - docker-common
-          - docker-latest
-          - docker-latest-logrotate
-          - docker-logrotate
-          - docker-engine
-        state: absent
+       shell: |
+         dnf remove podman.x86_64 -y
+         dnf autoremove -y
+     when: 
+       - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+   - name: Uninstall old versions
+       dnf:
+         name:
+           - docker-client
+           - docker-client-latest
+           - docker-common
+           - docker-latest
+           - docker-latest-logrotate
+           - docker-logrotate
+           - docker-engine
+         state: absent
      when: 
        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
     
