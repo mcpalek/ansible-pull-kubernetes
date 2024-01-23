@@ -19,7 +19,10 @@
      args:
       creates: /usr/local/bin/helm
 
-   - name: Upgrade all packages on server
-     package:
-     upgrade: dist
-     force_apt_get: yes
+   - name: Update all Debian/Ubuntu packages to their latest version
+     ansible.builtin.apt:
+                update_cache: true
+                cache_valid_time: 3600
+                name: "*"
+                state: latest
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
