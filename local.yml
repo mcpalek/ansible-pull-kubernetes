@@ -1,9 +1,11 @@
-- hosts: localhost
-  connection: local
-  become: true
 
-  tasks:
-  - name: Download Helm command line tool
+---
+ - hosts: localhost
+   connection: local
+   become: true
+
+   tasks:
+   - name: download helm
     #ansible.builtin.uri:
     #url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
    # return_content: true
