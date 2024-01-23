@@ -10,7 +10,7 @@
      ansible.builtin.uri:
        url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
        return_content: true
-       register: helm_installer
+   register: helm_installer
     #ansible.builtin.uri:
     #url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
    # return_content: true
