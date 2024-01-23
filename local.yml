@@ -18,3 +18,14 @@
         remote_src: true
      args:
       creates: /usr/local/bin/helm
+
+   - name: Update apt repositories and cache on server
+     package:
+     update_cache: yes
+     force_apt_get: yes
+     cache_valid_time: 3600
+
+   - name: Upgrade all packages on server
+     package:
+     upgrade: dist
+     force_apt_get: yes
