@@ -10,7 +10,7 @@
    tasks:
    - name: install helm if it does not exist
      unarchive:
-        src: https://get.helm.sh/ {{helm_version}}
+        src: https://get.helm.sh/ {{ helm_version }}
         dest: /usr/local/bin
         extra_opts: "--strip-components=1"
         owner: root
