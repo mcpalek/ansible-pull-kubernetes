@@ -28,7 +28,7 @@
      when: 
        - ansible_distribution in ["Debian", "Ubuntu"]
 
-    - name: Update all RedHat/CentOs/Rocky packages to their latest version
+   - name: Update all RedHat/CentOs/Rocky packages to their latest version
      ansible.builtin.dnf:
                 update_cache: true
                 cache_valid_time: 3600
