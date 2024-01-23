@@ -35,11 +35,9 @@
                 state: latest
      when: 
        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
-   
    - name: Remove Podman
        shell: |
          dnf remove podman.x86_64 -y
-         dnf autoremove -y
      when: 
        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
    - name: Uninstall old versions
