@@ -120,10 +120,10 @@
       shell: |
        curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
        echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-             
+       apt update    
       when:
         - ansible_distribution in ["Debian", "Ubuntu"]
-    - name: INstall kubernetes on Debian/Ubuntu
+    - name: Install kubernetes on Debian/Ubuntu
       shell: apt install -y kubelet={{ kubernetes_version }} kubeadm={{ kubernetes_version }} kubectl={{ kubernetes_version }}
       when:
         - ansible_distribution in ["Debian", "Ubuntu"]
