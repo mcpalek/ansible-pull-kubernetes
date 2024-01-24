@@ -118,8 +118,8 @@
         - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
     - name: Add kubernetes Repo to Debian/Ubuntu
       shell: |
-       cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
-       deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/{{ repo_version }}/deb/ /
+       curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+       echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
              
       when:
         - ansible_distribution in ["Debian", "Ubuntu"]
