@@ -52,8 +52,6 @@
       shell: |
        dnf install -y yum-utils
        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-      args:
-        warn: no
       when:
         - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
     - name: Set up docker repository for Ubuntu
