@@ -99,7 +99,7 @@
         - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
     - name: Install Kubernetes Package
       shell: |
-       dnf install -y kubelet={{ kubernetes_version }},kubeadm{{ kubernetes_version }},kubectl={{ kubernetes_version }} --disableexcludes=kubernetes
+       dnf install -y kubelet-{{ kubernetes_version }},kubeadm-{{ kubernetes_version }},kubectl-{{ kubernetes_version }} --disableexcludes=kubernetes
        dnf install containerd.io
        sudo systemctl enable --now kubelet
        sudo containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
