@@ -67,11 +67,7 @@
           - docker-ce
           - docker-ce-cli
           - containerd.io
-    - name: Add the current user to the docker group
-      user:
-        name: $USER
-        groups: docker
-        append: yes
+    
     - name: Start and enable docker
       systemd:
         name: docker
