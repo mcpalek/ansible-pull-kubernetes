@@ -120,7 +120,7 @@
       shell: |
        cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
        deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/{{ repo_version }}/deb/ /
-       sudo apt -y install vim git curl wget kubelet={{ kubernetes_version }} kubeadm={{ kubernetes_version }} kubectl={{ kubernetes_version }}
+       sudo apt -y install vim git curl wget kubelet-{{ kubernetes_version }} kubeadm-{{ kubernetes_version }} kubectl-{{ kubernetes_version }}
        sudo apt-mark hold kubelet kubeadm kubectl
       when:
         - ansible_distribution in ["Debian", "Ubuntu"]
