@@ -100,7 +100,8 @@
     - name: Install Kubernetes Package
       shell: |
        dnf install -y kubelet={{ kubernetes_version }},kubeadm{{ kubernetes_version }},kubectl={{ kubernetes_version }} --disableexcludes=kubernetes
-       ddnf install containerd.io
+       dnf install containerd.io
+       sudo systemctl enable --now kubelet
        sudo containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
        sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
        rm /etc/containerd/config.toml
