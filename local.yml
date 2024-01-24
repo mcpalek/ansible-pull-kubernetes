@@ -77,3 +77,29 @@
         name: docker
         state: started
         enabled: yes
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+    - name: Copy /etc/yum.repos.d/kubernetes.repo
+      copy:
+        src: files/kubernetes.repo
+        dest: /etc/yum.repos.d/kubernetes.repo
+        owner: root
+        group: root
+        mode: '0644'
+      when:
+        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+    - name: Upgrade all packages
+      yum: name=* state=latest
+      when:
+        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+    - name: Install Kubernetes Package
+      shell: |
+       dnf install -y kubelet={{ kubernetes_version }},kubeadm{{ kubernetes_version }},kubectl={{ kubernetes_version }} --disableexcludes=kubernetes
+       ddnf install containerd.io
+       sudo containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
+       sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
+       rm /etc/containerd/config.toml
+       systemctl restart containerd
+      when:
+        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
