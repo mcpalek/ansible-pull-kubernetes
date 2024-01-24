@@ -80,6 +80,8 @@
     - name: Disable SELinux
       selinux:
         state: disabled
+      when:
+        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
     - name: Add kubernetes Repo to RedHat/CentOs/Rocky
       shell: |
         cat <<EOF > /etc/yum.repos.d/kubernetes.repo
