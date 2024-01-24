@@ -35,7 +35,7 @@
         dnf autoremove -y
       when:
         - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
-    - name: Uninstall old versions
+    - name: Uninstall old Docker versions
       dnf:
         name:
           - docker-client
@@ -48,7 +48,7 @@
         state: absent
       when:
         - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
-    - name: Set up docker repository
+    - name: Set up docker repository for Rocky
       shell: |
        dnf install -y yum-utils
        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -114,3 +114,15 @@
         sudo systemctl disable firewalld
       when:
         - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+    - name: Add kubernetes Repo to Debian/Ubuntu
+      shell: |
+       cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
+       deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/{{ repo_version }}/deb/ /
+       sudo apt -y install vim git curl wget kubelet={{ kubernetes_version }} kubeadm={{ kubernetes_version }} kubectl={{ kubernetes_version }}
+       sudo apt-mark hold kubelet kubeadm kubectl
+      when:
+        - ansible_distribution in ["Debian", "Ubuntu"]
+    - name: Disable Swap
+      shell: |
+        sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+        sudo swapoff -a
