@@ -107,3 +107,10 @@
        systemctl restart containerd
       when:
         - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+    - name: Enable / Start kubelet Service
+      service:
+        name: kubelet
+        state: started
+        enabled: yes
+      when:
+        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
