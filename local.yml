@@ -80,13 +80,17 @@
     - name: Disable SELinux
       selinux:
         state: disabled
-    - name: Copy /etc/yum.repos.d/kubernetes.repo
-      copy:
-        src: files/kubernetes.repo
-        dest: /etc/yum.repos.d/kubernetes.repo
-        owner: root
-        group: root
-        mode: '0644'
+    - name: Add kubernetes Repo to RedHat/CentOs/Rocky
+      shell: |
+        cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+        [kubernetes]
+        name=Kubernetes
+        baseurl=https://pkgs.k8s.io/core:/stable:/{{ kubernetes_version }}/rpm/
+        enabled=1
+        gpgcheck=1
+        gpgkey=https://pkgs.k8s.io/core:/stable:/{{ kubernetes_version }}/rpm/repodata/repomd.xml.key
+        exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
+
       when:
         - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
     - name: Upgrade all packages
