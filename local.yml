@@ -69,7 +69,7 @@
           - containerd.io
     - name: Add the current user to the docker group
       user:
-        name: aca
+        name: $USER
         groups: docker
         append: yes
     - name: Start and enable docker
