@@ -197,10 +197,10 @@
         sudo kubeadm init --apiserver-advertise-address={{ ansible_default_ipv4.address }} --control-plane-endpoint={{ ansible_default_ipv4.address }} --apiserver-cert-extra-sans={{ ansible_default_ipv4.address }} --pod-network-cidr=172.16.0.0/16 --upload-certs 
     - name: create konfig folder
       file: 
-        path: "/.kube" 
+        path: "$HOME/.kube" 
         state: directory
-        owner: root
-        group: root
+        owner: aca
+        group: aca
         mode: '0644'
     - name: copy konfig to .kube folder
       ansible.builtin.copy:
