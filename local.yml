@@ -192,7 +192,7 @@
 
     - name: Initialize Kubernetes 
       shell: |
-        sudo kubeadm init --apiserver-advertise-address=$myhost --control-plane-endpoint=$myhost --apiserver-cert-extra-sans=$myhost --pod-network-cidr=172.16.0.0/16 --upload-certs
+        sudo kubeadm init --apiserver-advertise-address={{ myhost }} --control-plane-endpoint={{ myhost }} --apiserver-cert-extra-sans={{ myhost }} --pod-network-cidr=172.16.0.0/16 --upload-certs
     
     - name: INstall Calico
       shell: |
