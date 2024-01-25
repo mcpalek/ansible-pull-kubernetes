@@ -2,4 +2,4 @@ helm_version: helm-v3.11.0-linux-amd64.tar.gz
 rocky_kubernetes_version: 1.26.1
 ubuntu_kubernetes_version: 1.26.1-00
 repo_version: v1.26
-myhost: $(hostname -I)
+myhost: {{ ansible_default_ipv4.address }}
