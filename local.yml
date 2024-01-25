@@ -203,10 +203,10 @@
         state: directory 
     - name: copy files to .kube folder
       become: yes
-      command: cp -f /etc/kubernetes/admin.conf ~/.kube/config
+      command: cp -f /etc/kubernetes/admin.conf {{ ansible_env.HOME }}/.kube/config
     - name: change ownership
       become: yes
-      command: sudo chown $(id -u):$(id -g) ~/.kube/config
+      command: sudo chown $(id -u):$(id -g) {{ ansible_env.HOME }}/.kube/config
     - name: remove taints
       shell: |
         kubectl taint nodes --all node-role.kubernetes.io/control-plane-
