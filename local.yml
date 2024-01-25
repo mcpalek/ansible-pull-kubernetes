@@ -195,17 +195,11 @@
     - name: Initialize Kubernetes 
       shell: |
         sudo kubeadm init --apiserver-advertise-address={{ ansible_default_ipv4.address }} --control-plane-endpoint={{ ansible_default_ipv4.address }} --apiserver-cert-extra-sans={{ ansible_default_ipv4.address }} --pod-network-cidr=172.16.0.0/16 --upload-certs 
-    - name: create konfig folder
-      ansible.builtin.file: 
-        path: "/kube" 
-        state: directory
-        mode: '0755'
-    - name: copy konfig to .kube folder
-      ansible.builtin.copy:
-        src: /etc/kubernetes/admin.conf
-        dest: /kube/config
     - name: change ownership of the .kube folder
-      shell: sudo chown $(id -u):$(id -g) /kube/config    
+      shell: |
+        mkdir -p $HOME/.kube
+        sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
+        sudo chown $(id -u):$(id -g) $HOME/.kube/config    
     - name: remove taints
       shell: |
         kubectl taint nodes --all node-role.kubernetes.io/control-plane-
