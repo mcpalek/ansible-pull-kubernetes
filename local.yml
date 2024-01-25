@@ -72,20 +72,20 @@
           - docker-ce
           - docker-ce-cli
           - containerd.io
-    - name: create docker directory
-      shell: sudo mkdir -p /etc/systemd/system/docker.service.d
-    - name: Create daemon json config file
-      shell: |
-        sudo tee /etc/docker/daemon.json <<EOF
-         {
-          "exec-opts": ["native.cgroupdriver=systemd"],
-          "log-driver": "json-file",
-           "log-opts": {
-           "max-size": "100m"
-          },
-           "storage-driver": "overlay2"
-          }
-           EOF
+   # - name: create docker directory
+    #  shell: sudo mkdir -p /etc/systemd/system/docker.service.d
+    #- name: Create daemon json config file
+    #  shell: |
+     #   sudo tee /etc/docker/daemon.json <<EOF
+      #   {
+       #   "exec-opts": ["native.cgroupdriver=systemd"],
+        #  "log-driver": "json-file",
+         #  "log-opts": {
+        #  "max-size": "100m"
+         # },
+          # "storage-driver": "overlay2"
+         # }
+          # EOF
     - name: Start and enable docker
       systemd:
         name: docker
