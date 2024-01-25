@@ -200,7 +200,11 @@
       become_user: root
       file:
         path: ~/.kube
-        state: directory    
+        state: directory 
+    - name: copy files to .kube folder
+      shell: |
+        sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
+        sudo chown $(id -u):$(id -g) $HOME/.kube/config
     - name: remove taints
       shell: |
         kubectl taint nodes --all node-role.kubernetes.io/control-plane-
