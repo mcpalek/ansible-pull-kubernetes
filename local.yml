@@ -199,9 +199,7 @@
       file: 
         path: "/kube" 
         state: directory
-        owner: aca
-        group: aca
-        mode: '0644'
+        mode: '0755'
     - name: copy konfig to .kube folder
       ansible.builtin.copy:
         src: /etc/kubernetes/admin.conf
