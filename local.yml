@@ -198,6 +198,9 @@
     - name: create konfig folder
       file:
         path /$HOME/.kube state: directory
+        owner: root
+        group: root
+        mode: '0644'
     - name: copy konfig to .kube folder
       ansible.builtin.copy:
         src: /etc/kubernetes/admin.conf
