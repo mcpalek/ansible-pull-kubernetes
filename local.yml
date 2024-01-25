@@ -203,7 +203,7 @@
     - name: remove taints
       shell: |
         kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-        kubectl taint nodes --all node-role.kubernetes.io/master-
+        #kubectl taint nodes --all node-role.kubernetes.io/master-
     - name: INstall Calico
       shell: |
         curl https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml -O
