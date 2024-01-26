@@ -29,9 +29,15 @@
         state: latest
       when:
         - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
-    - name: Remove podman
+    - name: Remove podman from Redhat
       shell: |
         dnf remove podman.x86_64 -y
+        dnf autoremove -y
+      when:
+        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+    - name: remove buildah from redhat
+      shell: | 
+        dnf remove buildah.x86_64 -y
         dnf autoremove -y
       when:
         - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
