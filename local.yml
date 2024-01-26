@@ -208,8 +208,8 @@
       ansible.builtin.copy:
         source: /etc/kubernetes/admin.conf 
         destination: .kube/config
-        owner: aca
-        group: aca
+       # owner: aca
+       # group: aca
        # mode: "0700"
 
     - name: change ownership
