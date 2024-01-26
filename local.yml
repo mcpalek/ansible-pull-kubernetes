@@ -204,11 +204,11 @@
     - name: copy files to .kube folder
       become: yes
       become_user: aca
-      command: cp -f /etc/kubernetes/admin.conf {{ ansible_env.HOME }}/.kube/config
+      command: cp -f /etc/kubernetes/admin.conf .kube/config
     - name: change ownership
       become: yes
       become_user: aca
-      command: chown $(id -u):$(id -g) {{ ansible_env.HOME }}/.kube/config
+      command: chown $(id -u):$(id -g) .kube/config
     - name: remove taints
       shell: |
         kubectl taint nodes --all node-role.kubernetes.io/control-plane-
