@@ -214,7 +214,7 @@
     - name: change ownership
       become: yes
       #become_user: aca
-      command: chown $(id -u):$(id -g) ~/.kube/config
+      command: chown $(id -u):$(id -g) "{{ ansible_env.HOME }}/.kube/config"
     - name: remove taints
       shell: |
         kubectl taint nodes --all node-role.kubernetes.io/control-plane-
