@@ -201,7 +201,7 @@
       file:
         path: ~/.kube
         state: directory
-        mode: "0700"
+        #mode: "0700"
     - name: copy files to kube folder
       become: yes
       become_user: aca
@@ -210,7 +210,7 @@
         destination: .kube/config
         owner: aca
         group: aca
-        mode: "0700"
+       # mode: "0700"
 
     - name: change ownership
       become: yes
