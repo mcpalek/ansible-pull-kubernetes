@@ -197,14 +197,12 @@
         sudo kubeadm init --apiserver-advertise-address={{ ansible_default_ipv4.address }} --control-plane-endpoint={{ ansible_default_ipv4.address }} --apiserver-cert-extra-sans={{ ansible_default_ipv4.address }} --pod-network-cidr=172.16.0.0/16 --upload-certs 
     - name: create .kube folder
       become: yes
-      become_user: aca
       file:
         path: ~/.kube
         state: directory
-        #mode: "0700"
     - name: copy files to kube folder
       become: yes
-      become_user: aca
+      #become_user: aca
       ansible.builtin.copy:
         source: /etc/kubernetes/admin.conf 
         destination: .kube/config
@@ -214,7 +212,7 @@
 
     - name: change ownership
       become: yes
-      become_user: aca
+      #become_user: aca
       command: chown $(id -u):$(id -g) .kube/config
     - name: remove taints
       shell: |
