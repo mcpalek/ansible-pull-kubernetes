@@ -200,11 +200,18 @@
       become_user: aca
       file:
         path: ~/.kube
-        state: directory 
+        state: directory
+        mode: "0700" 
     - name: copy files to .kube folder
       become: yes
       become_user: aca
-      command: cp -f /etc/kubernetes/admin.conf .kube/config
+      ansible.builtin.copy:
+      source: /etc/kubernetes/admin.conf 
+      destination: .kube/config
+      owner: aca
+      group: aca
+      mode: "0700"
+
     - name: change ownership
       become: yes
       become_user: aca
