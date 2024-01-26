@@ -206,7 +206,7 @@
       become_user: aca
       ansible.builtin.copy:
         src: /etc/kubernetes/admin.conf 
-        dest: .kube/config
+        dest: ~.kube/config
        # owner: aca
        # group: aca
        # mode: "0700"
