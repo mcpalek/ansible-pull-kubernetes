@@ -211,10 +211,11 @@
        # group: aca
        # mode: "0700"
 
-  #  - name: change ownership
-  #    become: yes
-   #   become_user: aca
-   #   command: chown $(id -u):$(id -g) {{ ansible_env.HOME }}/.kube/config
+    - name: change ownership of the kube config
+      file: 
+        path: $HOME/.kube/config
+        owner: "{{ ansible_effective_user_id }}"
+        group: "{{ ansible_effective_group_id }}"
 
     - name: remove taints
       shell: |
