@@ -202,15 +202,15 @@
         path: ~/.kube
         state: directory
         
-    - name: copy files to .kube folder
+    - name: copy files to kube folder
       become: yes
       become_user: aca
       ansible.builtin.copy:
-      source: /etc/kubernetes/admin.conf 
-      destination: .kube/config
-      owner: aca
-      group: aca
-      mode: "0700"
+        source: /etc/kubernetes/admin.conf 
+        destination: .kube/config
+        owner: aca
+        group: aca
+        mode: "0700"
 
     - name: change ownership
       become: yes
