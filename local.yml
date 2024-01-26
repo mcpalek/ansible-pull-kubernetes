@@ -213,7 +213,7 @@
 
     - name: change ownership
       become: yes
-      become_user: root
+      become_user: aca
       command: chown $(id -u):$(id -g) {{ ansible_env.HOME }}/.kube/config
     - name: remove taints
       shell: |
