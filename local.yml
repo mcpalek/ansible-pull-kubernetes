@@ -28,19 +28,19 @@
         name: "*"
         state: latest
       when:
-        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+        - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
     - name: Remove podman from Redhat
       shell: |
         dnf remove podman.x86_64 -y
         dnf autoremove -y
       when:
-        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+        - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
     - name: remove buildah from redhat
       shell: | 
         dnf remove buildah.x86_64 -y
         dnf autoremove -y
       when:
-        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+        - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
     - name: Uninstall old Docker versions
       dnf:
         name:
@@ -53,7 +53,7 @@
           - docker-engine
         state: absent
       when:
-        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+        - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
 
     - name: Set up docker repository for Rocky
       shell: >
@@ -61,7 +61,7 @@
 
         yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
       when:
-        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+        - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
     - name: Set up docker repository for Ubuntu
       shell: >
         apt install -y curl gnupg2 software-properties-common apt-transport-https
@@ -101,7 +101,7 @@
       selinux:
         state: disabled
       when:
-        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+        - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
     - name: Add kubernetes Repo to RedHat/CentOs/Rocky
       shell: >
         cat <<EOF > /etc/yum.repos.d/kubernetes.repo
@@ -120,7 +120,7 @@
 
         exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
       when:
-        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+        - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
     #- name: Upgrade all packages on RedHat/CentOs/Rocky
     #  ansible.builtin.yum:
      #  name: '*'
@@ -143,7 +143,7 @@
 
         systemctl restart containerd
       when:
-        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+        - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
     - name: DisaBle Firewall
       shell: |
         sudo systemctl stop firewalld
