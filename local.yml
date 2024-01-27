@@ -23,7 +23,7 @@
       when:
         - ansible_distribution in ["Debian", "Ubuntu"]
     - name: Update all RedHat/CentOs/Rocky packages to their latest version
-      ansible.builtin.dnf:
+      ansible.builtin.yum:
         update_cache: true
         name: "*"
         state: latest
@@ -31,18 +31,18 @@
         - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
     - name: Remove podman from Redhat
       shell: |
-        dnf remove podman.x86_64 -y
-        dnf autoremove -y
+        yum remove podman.x86_64 -y
+        yum autoremove -y
       when:
         - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
     - name: remove buildah from redhat
       shell: | 
-        dnf remove buildah.x86_64 -y
-        dnf autoremove -y
+        yum remove buildah.x86_64 -y
+        yum autoremove -y
       when:
         - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
     - name: Uninstall old Docker versions
-      dnf:
+      yum:
         name:
           - docker-client
           - docker-client-latest
@@ -57,7 +57,7 @@
 
     - name: Set up docker repository for Rocky
       shell: >
-        dnf install -y yum-utils
+        yum install -y yum-utils
 
         yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
       when:
@@ -129,9 +129,9 @@
      #   - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
     - name: Install Kubernetes Package
       shell: >
-        dnf install -y kubelet-{{ rocky_kubernetes_version }} kubeadm-{{ rocky_kubernetes_version }} kubectl-{{ rocky_kubernetes_version }} --disableexcludes=kubernetes
+        yum install -y kubelet-{{ rocky_kubernetes_version }} kubeadm-{{ rocky_kubernetes_version }} kubectl-{{ rocky_kubernetes_version }} --disableexcludes=kubernetes
 
-        dnf install containerd.io
+        yum install containerd.io
 
         sudo systemctl enable --now kubelet
 
