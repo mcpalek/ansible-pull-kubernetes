@@ -121,12 +121,12 @@
         exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
       when:
         - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
-    - name: Upgrade all packages on RedHat/CentOs/Rocky
-      ansible.builtin.yum:
-       name: '*'
-       state: latest
-      when:
-        - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
+    #- name: Upgrade all packages on RedHat/CentOs/Rocky
+    #  ansible.builtin.yum:
+     #  name: '*'
+     #  state: latest
+    #  when:
+     #   - ansible_distribution in ["Rocky", "CentOs" ,"RedHat"]
     - name: Install Kubernetes Package
       shell: >
         dnf install -y kubelet-{{ rocky_kubernetes_version }} kubeadm-{{ rocky_kubernetes_version }} kubectl-{{ rocky_kubernetes_version }} --disableexcludes=kubernetes
