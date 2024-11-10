@@ -20,8 +20,8 @@ Before starting this playbok , you must install Git , Ansible and python with pi
 
 command should be used as ROOT user like this:
 
-ansible-pull -U https://github.com/mcpalek/ansible-pull-kubernetes-v4.git
+ansible-pull -U https://github.com/mcpalek/ansible-pull-kubernetes.git
 
 it will ask you for the username which is the git user
 
-and then for password which is your token
+
