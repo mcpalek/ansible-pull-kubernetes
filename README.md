@@ -1,4 +1,4 @@
-# ansible-pull-kubernetes-v4
+# ansible-pull-kubernetes
 
 With this playbook you can install Kubernetes on one server for the specific Linux type of distros as below:
 
