@@ -1,30 +1,85 @@
 ---
+- name: Ensure necessary packages are installed on Debian-based systems
+  ansible.builtin.shell: |
+    apt-get update
+    apt-get install -y curl gnupg2 software-properties-common apt-transport-https ca-certificates
+  when: ansible_os_family == "Debian"
+
+- name: Add Docker GPG key on Debian-based systems
+  ansible.builtin.shell: |
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+  when: ansible_os_family == "Debian"
+
+- name: Add Docker repository on Debian-based systems
+  ansible.builtin.shell: |
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  when: ansible_os_family == "Debian"
+
+- name: Check if Podman is installed
+  command: podman --version
+  register: podman_check
+  ignore_errors: true
+  changed_when: false
+
+- name: Debug Podman check
+  debug:
+    msg: "Podman is  installed"
+  when: podman_check.rc == 0
+
 - name: Remove Podman on Red Hat-based systems
   yum:
     name: podman
     state: absent
-  when: ansible_os_family == "RedHat"
+  when: podman_check.rc == 0 and ansible_os_family == "RedHat"
+  
+- name: Check if Buildah is installed
+  command: buildah --version
+  register: buildah_check
+  ignore_errors: true
+  changed_when: false
 
-- name: Add Docker repository on Debian-based systems
-  apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable
-    state: present
-  when: ansible_os_family == "Debian"
+- name: Debug Buildah check
+  debug:
+    msg: "Buildah is installed"
+  when: buildah_check.rc == 0
 
-- name: Add Docker repository on Red Hat-based systems
-  yum_repository:
-    name: docker-ce-stable
-    description: Docker CE Stable - $basearch
-    baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
-    gpgcheck: 1
-    gpgkey: https://download.docker.com/linux/centos/gpg
-    enabled: 1
-  when: ansible_os_family == "RedHat"
+- name: Remove Buildah on Red Hat-based systems
+  yum:
+    name: buildah
+    state: absent
+  when: buildah_check.rc == 0 and ansible_os_family == "RedHat"
+  
+- name: Uninstall old Docker versions from RedHat/CentOs/Rocky
+  yum:
+        name:
+          - docker-client
+          - docker-client-latest
+          - docker-common
+          - docker-latest
+          - docker-latest-logrotate
+          - docker-logrotate
+          - docker-engine
+        state: absent
+  when:
+        - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
+- name: Set up docker repository for RedHat/CentOs/Rocky
+  shell: >
+        yum install -y yum-utils
+
+        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  when:
+        - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
 
 - name: Check if Docker is installed
-  command: docker --version
+  ansible.builtin.command: "docker --version"
   register: docker_check
   ignore_errors: true
+  changed_when: false
+
+- name: Check Docker installation status
+  ansible.builtin.debug:
+    msg: "Docker is not installed"
+  when: docker_check.failed
 
 - name: Install Docker on Debian-based systems
   apt:
@@ -33,9 +88,23 @@
     update_cache: yes
   when: docker_check.failed and ansible_os_family == "Debian"
 
-- name: Install Docker on Red Hat-based systems
-  yum:
-    name: docker-ce
-    state: present
-    update_cache: yes
-  when: docker_check.failed and ansible_os_family == "RedHat"
+- name: Install the latest version of Docker Engine and containerd on RedHat/CentOs/Rocky
+  package:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+  when:
+        - docker_check.failed and ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
+- name: Start and enable docker on RedHat/CentOs/Rocky
+  systemd:
+        name: docker
+        state: started
+        enabled: yes
+  when:
+        - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
+- name: Disable SELinux on RedHat/CentOs/Rocky
+  selinux:
+        state: disabled
+  when:
+        - ansible_distribution in ["Rocky", "CentOS" ,"RedHat"]
