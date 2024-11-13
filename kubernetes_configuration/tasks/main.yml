@@ -34,16 +34,15 @@
   become: true
    
 - name: Check if Calico is installed
-  ansible.builtin.shell: "kubectl get pods -n kube-system -l k8s-app=calico-node"
+  ansible.builtin.shell: "kubectl get pods -n kube-system -l k8s-app=calico-node"    
   register: calico_check
   ignore_errors: true
   changed_when: false
 
-- name: Debug Calico check
+- name: Report Calico status or install if missing
   ansible.builtin.debug:
-    msg: "Calico is installed"
-  when: calico_check.rc == 0
-
+  msg: "{{ 'Calico is already installed.' if calico_check.rc == 0 else 'Installing Calico...' }}"
+      
 - name: Install Calico if not installed
   ansible.builtin.shell: "kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml"
   when: calico_check.rc != 0
