@@ -3,18 +3,51 @@
   command: kubeadm init --pod-network-cidr=192.168.0.0/16
   register: kubeadm_output
   when: not kubectl_check.stat.exists
-
+  
+- name: create .kube folder
+  shell: mkdir -p $HOME/.kube
+  when: kubeadm_output is succeeded
+  
 - name: Set up kubeconfig for the root user
   copy:
     dest: /root/.kube/config
     content: "{{ lookup('file', '/etc/kubernetes/admin.conf') }}"
   when: kubeadm_output is succeeded
 
-- name: Install Pod network (Calico)
-  command: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
-  when: kubeadm_output is succeeded
+- name: Check if taint exists on nodes
+  ansible.builtin.shell: |
+    kubectl get nodes -o json | jq -e '.items[] | select(.spec.taints != null) | select(.spec.taints[]? | select(.key == "node-role.kubernetes.io/control-plane"))' > /dev/null
+  register: taint_check
+  ignore_errors: true
+  changed_when: false
+  
+- name: Debug Taints check
+  ansible.builtin.debug:
+    msg: "Taints are removed"
+  when: taint_check.rc != 0
+  
+- name: Remove taints if they exist
+  ansible.builtin.shell: |
+    kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+  when: taint_check.rc == 0
+  changed_when: true
+  become: true
+   
+- name: Check if Calico is installed
+  ansible.builtin.shell: "kubectl get pods -n kube-system -l k8s-app=calico-node"
+  register: calico_check
+  ignore_errors: true
+  changed_when: false
 
-- name: Join worker nodes to cluster
-  command: "{{ kubeadm_output.stdout_lines[-1] }}"
-  when: kubeadm_output is succeeded
+- name: Debug Calico check
+  ansible.builtin.debug:
+    msg: "Calico is installed"
+  when: calico_check.rc == 0
 
+- name: Install Calico if not installed
+  ansible.builtin.shell: "kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml"
+  when: calico_check.rc != 0
+  changed_when: true
+
+
+ 
