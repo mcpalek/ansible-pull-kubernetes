@@ -41,7 +41,7 @@
 
 - name: Report Calico status or install if missing
   ansible.builtin.debug:
-  msg: "{{ 'Calico is already installed.' if calico_check.rc == 0 else 'Installing Calico...' }}"
+    msg: "{{ 'Calico is already installed.' if calico_check.rc == 0 else 'Installing Calico...' }}"
       
 - name: Install Calico if not installed
   ansible.builtin.shell: "kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml"
